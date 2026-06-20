@@ -54,11 +54,11 @@ def load_pdf(file):
 
 
 # ===== テキスト分割 =====
-# chunk_size=400
-# chunk_overlap=100：前後のチャンクと100文字重複させることで文脈の切れ目をなくす
+# chunk_size=200
+# chunk_overlap=50：前後のチャンクと100文字重複させることで文脈の切れ目をなくす
 def split_text(text):
-    chunk_size = 400
-    overlap = 100
+    chunk_size = 200
+    overlap = 50
     chunks = []
     start = 0
     while start < len(text):
@@ -148,6 +148,8 @@ if prompt:
     if results["documents"]:
         context_text = "\n".join(results["documents"][0])
         user_message = f"以下は関連ドキュメントの抜粋です。\n{context_text}\nこの情報を参考に以下の質問に答えてください。\n{prompt}"
+        # print("-------------------------------------------------")
+        # print(f"user_message: {user_message}")
     else:
         user_message = (
             prompt  # 関連ドキュメントが見つからなければ素の質問をそのまま渡す
