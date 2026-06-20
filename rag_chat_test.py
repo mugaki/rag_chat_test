@@ -67,7 +67,7 @@ def split_text(text):
     return chunks
 
 
-PAGE_TITLE = "Rag Test Chat (PDF)"
+PAGE_TITLE = "Rag Chat Test (PDF)"
 st.set_page_config(page_title=PAGE_TITLE)
 
 system_prompt = (
