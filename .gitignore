@@ -8,6 +8,7 @@ wheels/
 *.egg-info
 .env
 chroma_db/
+uv.lock
 
 # Virtual environments
 .venv

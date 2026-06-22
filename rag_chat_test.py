@@ -1,23 +1,32 @@
 import os
-import streamlit as st
-from openai import OpenAI
+
 import chromadb
+import streamlit as st
 from chromadb.utils import embedding_functions
-from pypdf import PdfReader
 from dotenv import load_dotenv
+from openai import AzureOpenAI, OpenAI
+from pypdf import PdfReader
 
 load_dotenv()
 
 # ===== LLMクライアントの設定 =====
-# .envのLLM_PROVIDERでollamaとopenaiを切り替える
+# .envのLLM_PROVIDERでollama / openai / chatai を切り替える
 provider = os.getenv("LLM_PROVIDER", "ollama")
 
 if provider == "openai":
     llm_model = os.getenv("OPENAI_MODEL", "gpt-5.1")
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+elif provider == "chatai":
+    llm_model = os.getenv("CHATAI_MODEL", "gpt-5.1")
+    chatai_base = os.getenv("CHATAI_ENDPOINT").rstrip("/")
+    client = AzureOpenAI(
+        api_key=os.getenv("CHATAI_API_KEY"),
+        azure_endpoint=f"{chatai_base}/{llm_model}",
+        base_url=os.getenv("CHATAI_API_BASE_URL","DUMMY"),
+    )
 else:
     # OllamaはOpenAI互換APIを持つのでOpenAIクライアントがそのまま使える
-    llm_model = os.getenv("OLLAMA_MODEL", "gemma4:e2b-it-qat")
+    llm_model = os.getenv("OLLAMA_MODEL", "qwen3.5:9b")
     client = OpenAI(
         api_key="ollama",
         base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1"),
@@ -173,6 +182,10 @@ if prompt:
         for chunk in client.chat.completions.create(
             model=llm_model, messages=messages, temperature=0.3, stream=True
         ):
+            # Azure OpenAI互換APIではchoicesが空のチャンク（安全フィルタ等のメタ情報）が
+            # 先頭に流れてくる場合があるためスキップする
+            if not chunk.choices:
+                continue
             response += chunk.choices[0].delta.content or ""
             placeholder.write(response)
 

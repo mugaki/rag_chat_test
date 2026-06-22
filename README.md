@@ -26,14 +26,23 @@ copy .env.example .env
 uv run streamlit run rag_chat_test.py --server.fileWatcherType none
 ```
 
+ポート番号を変えたい場合は `--server.port` オプションを指定します。
+
+```cmd
+uv run streamlit run agentic_rag_chat_test.py --server.fileWatcherType none --server.port 8501
+```
+
 `sentence-transformers` + `transformers` の組み合わせでは、Streamlit のファイル監視が `torchvision` の未導入モジュールを走査して大量の `ModuleNotFoundError` ログを出すことがあります。`--server.fileWatcherType none` で監視を無効化すると回避できます。
 
 ## 環境変数
 
 | 変数名 | 説明 | デフォルト |
 |---|---|---|
-| `LLM_PROVIDER` | 使用するプロバイダ (`ollama` or `openai`) | `ollama` |
+| `LLM_PROVIDER` | 使用するプロバイダ (`ollama` / `openai` / `chatai`) | `ollama` |
 | `OLLAMA_BASE_URL` | Ollama の API エンドポイント | `http://localhost:11434/v1` |
-| `OLLAMA_MODEL` | Ollama で使用するモデル名 | `gemma4:e2b-it-qat` |
+| `OLLAMA_MODEL` | Ollama で使用するモデル名 | `qwen3.5:9b` |
 | `OPENAI_API_KEY` | OpenAI の API キー | — |
 | `OPENAI_MODEL` | OpenAI で使用するモデル名 | `gpt-5.1` |
+| `CHATAI_ENDPOINT` | ChatAI のベースエンドポイント（末尾にモデル名を含めない） | `https://xxxxxxxx/xxxxxx/chat-ai/gpt/` |
+| `CHATAI_API_KEY` | ChatAI のAPI キー | — |
+| `CHATAI_MODEL` | ChatAI で使用するモデル名 | `gpt-5.1` |
