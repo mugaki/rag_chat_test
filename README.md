@@ -29,7 +29,7 @@ uv run streamlit run rag_chat_test.py --server.fileWatcherType none
 ポート番号を変えたい場合は `--server.port` オプションを指定します。
 
 ```cmd
-uv run streamlit run agentic_rag_chat_test.py --server.fileWatcherType none --server.port 8501
+uv run streamlit run rag_chat_test.py --server.fileWatcherType none --server.port 8501
 ```
 
 `sentence-transformers` + `transformers` の組み合わせでは、Streamlit のファイル監視が `torchvision` の未導入モジュールを走査して大量の `ModuleNotFoundError` ログを出すことがあります。`--server.fileWatcherType none` で監視を無効化すると回避できます。
